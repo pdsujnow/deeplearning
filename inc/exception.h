@@ -8,7 +8,6 @@ enum serverity { warning, error };
 
 }
 
-
 class p_exception : virtual public boost::exception {
  public:
 	 p_exception() = default;

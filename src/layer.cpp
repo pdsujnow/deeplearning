@@ -1,9 +1,5 @@
 #include "layer.h"
-//#include "fully_connected_layer.h"
-//#include "logistic_regression_layer.h"
 #include "util.h"
-
-//using namespace cnn;
 
 void layer_base::init_para() {
 	momentum = 0.5;
@@ -85,6 +81,10 @@ matrix<float> layer_base::get_input() {
 	return input;
 }
 
+matrix<float> layer_base::get_B() {
+	return B;
+}
+
 void layer_base::recv_data(matrix<float> data_set, matrix<float> label) {
 	input = data_set;
 	input_l = label;
@@ -155,14 +155,12 @@ void layer_base::back_prop() {
 }
 
 void layer_base::train(matrix<float> data_set, matrix<float> labels) {
-	
 	int i, j;
-	int batch_size = 100;
-	int n_epochs = 100;
-	int batch_index = data_set.size1() / batch_size;
+	batch_size = 100;
+	n_epochs = 100;
+	batch_index = data_set.size1() / batch_size;
 	for (i = 0; i < n_epochs; i++) {
 		for (j = 0; j < batch_index; j++) {
-			//printf("loss function:%f", lossfunc);
 			matrix_range<matrix<float> > train_labels_p(labels,
 				range(j*batch_size, (j + 1) * batch_size),
 				range(0, labels.size2()));
@@ -176,3 +174,4 @@ void layer_base::train(matrix<float> data_set, matrix<float> labels) {
 	}
 
 }
+

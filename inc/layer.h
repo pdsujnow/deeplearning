@@ -9,7 +9,7 @@ using namespace boost::numeric::ublas;
 class layer_base {
 public:
 	layer_base() = default;
-	layer_base(int in_dim, int out_dim, int act) : out_dim_(out_dim), in_dim_(in_dim),output_func(act){ init_para(); };
+	layer_base(int in_dim, int out_dim, int act) : out_dim_(out_dim), in_dim_(in_dim), output_func(act){ init_para(); };
 	void init_para();
 	void add(layer_base *layer);
 	void train(matrix<float> data_set, matrix<float> labels);
@@ -23,12 +23,16 @@ public:
 	matrix<float> get_output();
 	matrix<float> calc_error();
 	matrix<float> get_W();
+	matrix<float> get_B();
 	matrix<float> get_input();
 	
 	virtual void calc_errorterm(matrix<float> d, matrix<float> w);
 protected:
 	int out_dim_, in_dim_;
 	int acti_func;
+	int batch_size;
+	int n_epochs;
+	int batch_index;
 
 	matrix<float> W;
 	matrix<float> error;
@@ -44,8 +48,10 @@ protected:
 
 	float learning_rate;
 	float momentum;
-private:
+
 	std::vector<layer_base *> layer_vec;
+private:
+	
 	double lossfunc;
 	int output_func;
 };

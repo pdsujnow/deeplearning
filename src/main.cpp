@@ -8,6 +8,7 @@
 #include "layer.h"
 #include "fully_connected_layer.h"
 #include "logistic_regression_layer.h"
+#include "autoencoders.h"
 #include "util.h"
 #include "exception.h"
 using namespace boost::numeric::ublas;
@@ -116,10 +117,8 @@ int main() {
 
 	train_labels = parse_mnist_labels("t10k-labels-idx1-ubyte");
 	train_images = parse_mnist_images("t10k-images-idx3-ubyte");
-
-	normalize(&train_images);
 	layer_base lbase;
-	fully_connected_layer rr(784, 100, SIGM);
+	autoencoders rr(train_images, 784, 100, SIGM);
 	logistic_regression_layer ll(100, train_labels.size2(), SOFTMAX);
 	lbase.add(&rr);
 	lbase.add(&ll);

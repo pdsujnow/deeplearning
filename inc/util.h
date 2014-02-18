@@ -3,8 +3,6 @@
 
 enum acti { SIGM, TANH, SOFTMAX };
 
-
-
 template<typename P1>
 P1* reverse_endian(P1* p) {
 	std::reverse(reinterpret_cast<char*>(p), reinterpret_cast<char*>(p)+sizeof(P1));
@@ -17,7 +15,6 @@ void uniform_rand(Iter begin, Iter end, P2 gap){
 	for (Iter it = begin; it != end; ++it){
 		u = (P2)rand();
 		*it = (P2)(u / RAND_MAX - 0.5) * 2 * gap;
-		//std::cout << *it << std::endl;
 	}
 }
 
