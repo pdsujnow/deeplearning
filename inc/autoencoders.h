@@ -14,7 +14,6 @@ public:
 	}
 
 	void auto_train(matrix<float> data_set) {
-		batch_size = 100;
 		fully_connected_layer rr(data_set.size2(), 100, SIGM);
 		logistic_regression_layer ll(100, data_set.size2(), SOFTMAX);
 		add(&rr);

@@ -11,6 +11,8 @@
 #include "autoencoders.h"
 #include "util.h"
 #include "exception.h"
+#include "rbm.h"
+
 using namespace boost::numeric::ublas;
 
 matrix<float> parse_mnist_labels(const std::string& label_file) {
@@ -117,7 +119,9 @@ int main() {
 
 	train_labels = parse_mnist_labels("t10k-labels-idx1-ubyte");
 	train_images = parse_mnist_images("t10k-images-idx3-ubyte");
+	normalize(&train_images);
 	layer_base lbase;
+	rbm rb(train_images, 784, 100, SIGM);
 	autoencoders rr(train_images, 784, 100, SIGM);
 	logistic_regression_layer ll(100, train_labels.size2(), SOFTMAX);
 	lbase.add(&rr);

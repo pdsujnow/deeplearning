@@ -55,3 +55,4 @@ private:
 	double lossfunc;
 	int output_func;
 };
+

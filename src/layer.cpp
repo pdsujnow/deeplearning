@@ -3,22 +3,14 @@
 
 void layer_base::init_para() {
 	momentum = 0.5;
-	learning_rate = 2;
-	W.resize(in_dim_, out_dim_);
-	auto it = W.begin1();
-	auto it_end = W.end1();
-	for (; it != it_end; ++it) {
-		auto it_r = it.begin();
-		auto it_r_end = it.end();
-		uniform_rand(it_r, it_r_end, 4 * sqrt(6 / ((float)in_dim_ + (float)out_dim_)));
-	}
+	learning_rate = 0.1;
+	init_weight(&W, in_dim_, out_dim_);
 }
 
 void layer_base::calc_activation() {
 	matrix<float> wx = prod(input, W);
 	if (B.size1() == 0){
-		zero_matrix<float> rB(input.size1(), out_dim_);
-		B = rB;
+		reset_matrix(&B, input.size1(), out_dim_);
 	}
 	wx = wx - B;
 	auto it = wx.begin1();
@@ -54,13 +46,11 @@ void layer_base::calc_dpara(matrix<float> output_down) {
 	dB = learning_rate * trans(delta) / delta.size1();
 
 	if (mW.size1() == 0) {
-		zero_matrix<float> m(dW.size1(), dW.size2());
-		mW = m;
+		reset_matrix(&mW, dW.size1(), dW.size2());
 	}
 
 	if (mB.size1() == 0) {
-		zero_matrix<float> m(dB.size1(), dB.size2());
-		mB = m;
+		reset_matrix(&mB, dB.size1(), dB.size2());
 	}
 
 	mW = momentum * mW + dW;
@@ -121,15 +111,10 @@ void layer_base::forward_prop(matrix<float> input, matrix<float> label) {
 	}
 	error = element_prod(error, error);
 
-	auto it1 = error.begin1();
-	auto it1_end = error.end1();
-	for (; it1 != it1_end; ++it1) {
-		auto it_r = it1.begin();
-		auto it_r_end = it1.end();
-		for (; it_r != it_r_end; it_r++) {
-			sum += *it_r;
-		}
-	}
+	scalar_vector<float> svl(error.size1());
+	scalar_vector<float> svr(error.size2());
+	sum = inner_prod(prod(svl, error), svr);
+
 	lossfunc = 0.5 * sum / error.size1();
 }
 
