@@ -113,7 +113,7 @@ void normalize(matrix<float> *m) {
 }
 
 int main() {
-
+	bool denoising = true;
 	matrix<float> train_labels, testfc_labels;
 	matrix<float> train_images, test_images;
 
@@ -122,7 +122,7 @@ int main() {
 	normalize(&train_images);
 	layer_base lbase;
 	rbm rb(train_images, 784, 100, SIGM);
-	autoencoders rr(train_images, 784, 100, SIGM);
+	autoencoders rr(train_images, 784, 100, denoising);
 	logistic_regression_layer ll(100, train_labels.size2(), SOFTMAX);
 	lbase.add(&rr);
 	lbase.add(&ll);

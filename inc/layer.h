@@ -12,7 +12,7 @@ public:
 	layer_base(int in_dim, int out_dim, int act) : out_dim_(out_dim), in_dim_(in_dim), output_func(act){ init_para(); };
 	void init_para();
 	void add(layer_base *layer);
-	void train(matrix<float> data_set, matrix<float> labels);
+	void train(matrix<float> data_set, matrix<float> labels, bool isdenoising = false);
 	void forward_prop(matrix<float> input, matrix<float> label);
 	void back_prop();
 	void calc_activation();

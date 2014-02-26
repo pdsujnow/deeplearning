@@ -3,7 +3,7 @@
 
 void layer_base::init_para() {
 	momentum = 0.5;
-	learning_rate = 0.1;
+	learning_rate = 0.1f;
 	init_weight(&W, in_dim_, out_dim_);
 }
 
@@ -139,10 +139,12 @@ void layer_base::back_prop() {
 	}
 }
 
-void layer_base::train(matrix<float> data_set, matrix<float> labels) {
+void layer_base::train(matrix<float> data_set, matrix<float> labels, bool isdenoising) {
 	int i, j;
+	float corruption_level = 0.2f;
 	batch_size = 100;
 	n_epochs = 100;
+	
 	batch_index = data_set.size1() / batch_size;
 	for (i = 0; i < n_epochs; i++) {
 		for (j = 0; j < batch_index; j++) {
@@ -152,6 +154,9 @@ void layer_base::train(matrix<float> data_set, matrix<float> labels) {
 			matrix_range<matrix<float> > train_images_p(data_set,
 				range(j*batch_size, (j + 1) * batch_size),
 				range(0, data_set.size2()));
+			if (isdenoising == true) {
+				train_images_p = corrupted_matrix(train_images_p, corruption_level);
+			}
 			forward_prop(train_images_p, train_labels_p);
 			back_prop();
 			printf("loss function:%lf\n", lossfunc);

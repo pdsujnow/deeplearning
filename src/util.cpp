@@ -36,3 +36,18 @@ void init_weight(matrix<float> *m, int in_dim_, int out_dim_) {
 		uniform_rand(it_r, it_r_end, 4 * sqrt(6 / ((float)in_dim_ + (float)out_dim_)));
 	}
 }
+
+matrix<float> corrupted_matrix(matrix<float> m, float corruption_level) {
+	auto it = m.begin1();
+	auto it_end = m.end1();
+	for (; it != it_end; ++it) {
+		auto it_r = it.begin();
+		auto it_r_end = it.end();
+		for (auto iter = it_r; iter != it_r_end; iter++) {
+			if (corruption_level > rand() / RAND_MAX) {
+				*iter = 0;
+			}
+		}
+	}
+	return m;
+}

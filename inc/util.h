@@ -7,6 +7,8 @@ enum acti { SIGM, TANH, SOFTMAX };
 void matrix_act(matrix<float> *m, bool clamp);
 void init_weight(matrix<float> *m, int in, int out);
 void reset_matrix(matrix<float> *m, int in, int out);
+matrix<float> corrupted_matrix(matrix<float> m, float corruption_level);
+
 template<typename P1>
 P1* reverse_endian(P1* p) {
 	std::reverse(reinterpret_cast<char*>(p), reinterpret_cast<char*>(p)+sizeof(P1));
