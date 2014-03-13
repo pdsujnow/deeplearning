@@ -3,6 +3,7 @@ msvc/debug
 msvc.sdf
 msvc.v12.suo
 msvc.vcxproj.user
+msvc.sdf
 
 # Sublime test
 deeplearning.sublime-project
