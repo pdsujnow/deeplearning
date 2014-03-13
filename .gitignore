@@ -1,15 +1,9 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-
+# Visual Studio temporary files, build results
 msvc/debug
+msvc.sdf
+msvc.v12.suo
+msvc.vcxproj.user
+
+# Sublime test
+deeplearning.sublime-project
+deeplearning.sublime-workspace
