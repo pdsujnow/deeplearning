@@ -17,17 +17,18 @@ class LayerBase {
   LayerBase(int in_dim, int out_dim, int act) :
     out_dim_(out_dim), in_dim_(in_dim), output_func(act) { InitPara(); }
   void InitPara();
-  void add(LayerBase *layer);
+  void add(std::shared_ptr<LayerBase> layer);
   void train(matrix<float> data_set,
              matrix<float> labels,
              bool isdenoising = false);
-
-  void forward_Prop(matrix<float> input, matrix<float> label);
-  void back_Prop();
+  void test(const matrix<float> &data_set,
+            const matrix<float> &labels);
+  void ForwardProp(const matrix<float> &input, const matrix<float> &label);
+  void BackProp();
   void CalcActivation();
-  void CalcDpara(matrix<float> o);
+  void CalcDpara(const matrix<float> &o);
 
-  void recv_data(matrix<float> data_set, matrix<float> label) {
+  void recv_data(const matrix<float> &data_set, const matrix<float> &label) {
     input = data_set;
     input_l = label;
   }
@@ -36,13 +37,13 @@ class LayerBase {
     return error;
   }
 
-  matrix<float> get_delta() { return delta; }
-  matrix<float> get_output() { return output; }
-  matrix<float> get_W() { return W; }
-  matrix<float> get_B() { return B; }
-  matrix<float> get_input() { return input; }
+  const matrix<float> &get_delta() const { return delta; }
+  const matrix<float> &get_output() const { return output; }
+  const matrix<float> &get_W() const { return W; }
+  const matrix<float> &get_B() const { return B; }
+  const matrix<float> &get_input() const { return input; }
 
-  virtual void CalcErrorterm(matrix<float> d, matrix<float> w) {}
+  virtual void CalcErrorterm(const matrix<float> &d, const matrix<float> &w) {}
 
  protected:
   int out_dim_, in_dim_;
@@ -60,13 +61,11 @@ class LayerBase {
   matrix<float> dW;
   matrix<float> mW;
   matrix<float> B;
-  matrix<float> dB;
-  matrix<float> mB;
 
   float learning_rate;
   float momentum;
 
-  std::vector<LayerBase *> layer_vec;
+  std::vector<std::shared_ptr<LayerBase>> layer_vec;
 
  private:
   double lossfunc;

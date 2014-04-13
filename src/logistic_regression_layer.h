@@ -12,7 +12,7 @@ class LogisticRegressionLayer :public LayerBase {
   LogisticRegressionLayer(int in_dim, int out_dim, acti acti) :
     LayerBase(in_dim, out_dim, acti) {}
 
-  void CalcErrorterm(matrix<float> d, matrix<float> w) override {
+  void CalcErrorterm(const matrix<float> &d, const matrix<float> &w) override {
     if (acti_func == SIGM) {
       scalar_matrix<float> m(output.size1(), output.size2());
       delta = element_prod(-error, element_prod(output, m - output));

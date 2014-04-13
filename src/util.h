@@ -10,10 +10,11 @@ using namespace boost::numeric::ublas;
 
 namespace dl {
 enum acti { SIGM, TANH, SOFTMAX };
-void MatrixAct(matrix<float> *m, bool clamp);
-void InitWeight(matrix<float> *m, int in, int out);
-void ResetMatrix(matrix<float> *m, int in, int out);
-matrix<float> CorruptedMatrix(matrix<float> m, float corruption_level);
+void MatrixAct(matrix<float> &m, const bool clamp);
+void InitWeight(matrix<float> &m, int in, int out);
+void ResetMatrix(matrix<float> &m, int in, int out);
+void CorruptedMatrix(matrix<float> m, const float corruption_level);
+void matrix_shuffle(matrix<float> &data_set, matrix<float> &labels);
 
 template<typename P1>
 P1* ReverseEndian(P1* p) {

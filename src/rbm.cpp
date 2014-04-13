@@ -3,11 +3,11 @@
 
 namespace dl {
 void Rbm::InitPara(int in_dim, int out_dim) {
-  InitWeight(&weight, in_dim, out_dim);
-  ResetMatrix(&weightinc, in_dim, out_dim);
+  InitWeight(weight, in_dim, out_dim);
+  ResetMatrix(weightinc, in_dim, out_dim);
 }
 
-void Rbm::RbmTrain(matrix<float> data_set) {
+void Rbm::RbmTrain(matrix<float> &data_set) {
   int i, j;
   batch_size = 100;
   n_epochs = 100;
@@ -28,29 +28,29 @@ void Rbm::RbmTrain(matrix<float> data_set) {
   }
 }
 
-void Rbm::Prop(matrix<float> data) {
-  ResetMatrix(&visbiasinc, batch_size, in_dim_);
-  ResetMatrix(&hidbiasinc, batch_size, out_dim_);
+void Rbm::Prop(const matrix<float> &data) {
+  ResetMatrix(visbiasinc, batch_size, in_dim_);
+  ResetMatrix(hidbiasinc, batch_size, out_dim_);
   hid = prod(data, weight);
   if (hidbiases.size1() == 0) {
-    ResetMatrix(&hidbiases, batch_size, out_dim_);
+    ResetMatrix(hidbiases, batch_size, out_dim_);
   }
   hid = hid - hidbiases;
-  MatrixAct(&hid, true);
+  MatrixAct(hid, true);
 
   negdata = prod(hid, trans(weight));
   if (visbiases.size1() == 0) {
-    ResetMatrix(&visbiases, batch_size, in_dim_);
+    ResetMatrix(visbiases, batch_size, in_dim_);
   }
   negdata = negdata - visbiases;
-  MatrixAct(&negdata, false);
+  MatrixAct(negdata, false);
 
   neghid = prod(negdata, weight);
   neghid = neghid - hidbiases;
-  MatrixAct(&neghid, false);
+  MatrixAct(neghid, false);
 }
 
-void Rbm::Gibbs(matrix<float> data) {
+void Rbm::Gibbs(const matrix<float> &data) {
   scalar_matrix<float> sm(batch_size, batch_size);
   scalar_vector<float> svl(data.size1());
   scalar_vector<float> svr(data.size2());

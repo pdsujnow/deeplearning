@@ -14,7 +14,7 @@ class FullyConnectedLayer : public LayerBase {
     int out_dim, acti acti) :
     LayerBase(in_dim, out_dim, acti) {}
 
-  void CalcErrorterm(matrix<float> delta_up, matrix<float> W_up) override {
+  void CalcErrorterm(const matrix<float> &delta_up, const matrix<float> &W_up) override {
     matrix<float> deri_act;
     scalar_matrix<float> m(output.size1(), output.size2());
     if (acti_func == SIGM) {

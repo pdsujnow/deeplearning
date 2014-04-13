@@ -11,7 +11,7 @@ namespace dl {
 class Autoencoders : public FullyConnectedLayer {
  public:
   Autoencoders() = default;
-  Autoencoders(matrix<float> data_set,
+  Autoencoders(const matrix<float> &data_set,
                 int in_dim,
                 int out_dim,
                 bool isdenoising, acti acti = SIGM) :
@@ -19,14 +19,14 @@ class Autoencoders : public FullyConnectedLayer {
     AutoTrain(data_set, isdenoising);
   }
 
-  void AutoTrain(matrix<float> data_set, bool isdenoising) {
-    FullyConnectedLayer rr(data_set.size2(), 100, SIGM);
-    LogisticRegressionLayer ll(100, data_set.size2(), SOFTMAX);
-    add(&rr);
-    add(&ll);
+  void AutoTrain(const matrix<float> &data_set, bool isdenoising) {
+    /*LayerPtr fl = LayerPtr(new FullyConnectedLayer(data_x.size2(), 2, SIGM));
+    LayerPtr rl = LayerPtr(new LogisticRegressionLayer(2, 2, SIGM);
+    add(rr);
+    add(ll);
     train(data_set, data_set, isdenoising);
     W = (*layer_vec.begin())->get_W();
-    B = (*layer_vec.begin())->get_B();
+    B = (*layer_vec.begin())->get_B();*/
   }
  private:
   DISALLOW_COPY_AND_ASSIGN(Autoencoders);

@@ -11,16 +11,16 @@ namespace dl {
 class Rbm : public FullyConnectedLayer {
  public:
 	Rbm() = default;
-	Rbm(matrix<float> data_set, int in_dim, int out_dim, acti acti) :
+	Rbm(matrix<float> &data_set, int in_dim, int out_dim, acti acti) :
     FullyConnectedLayer(in_dim, out_dim, acti) {
 		InitPara(in_dim, out_dim);
     RbmTrain(data_set);
 	}
 	void InitPara(int, int);
-  void RbmTrain(matrix<float> data_set);
+  void RbmTrain(matrix<float> &data_set);
 
-	void Gibbs(matrix<float> m);
-	void Prop(matrix<float> m);
+	void Gibbs(const matrix<float> &m);
+	void Prop(const matrix<float> &m);
 
  protected:
 	double err;

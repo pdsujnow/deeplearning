@@ -1,9 +1,12 @@
+#include <time.h>
+#include <boost/numeric/ublas/matrix_proxy.hpp>
+
 #include "util.h"
 
 namespace dl {
-void MatrixAct(matrix<float> *m, bool isclamp) {
-  auto it = m->begin1();
-  auto it_end = m->end1();
+void MatrixAct(matrix<float> &m, const bool isclamp) {
+  auto it = m.begin1();
+  auto it_end = m.end1();
   for (; it != it_end; ++it) {
     auto it_r = it.begin();
     auto it_r_end = it.end();
@@ -19,16 +22,16 @@ void MatrixAct(matrix<float> *m, bool isclamp) {
   }
 }
 
-void ResetMatrix(matrix<float> *m, int in_dim_, int out_dim_) {
+void ResetMatrix(matrix<float> &m, int in_dim_, int out_dim_) {
   zero_matrix<float> zm(in_dim_, out_dim_);
-  *m = zm;
+  m = zm;
 }
 
 
-void InitWeight(matrix<float> *m, int in_dim_, int out_dim_) {
-  m->resize(in_dim_, out_dim_);
-  auto it = m->begin1();
-  auto it_end = m->end1();
+void InitWeight(matrix<float> &m, int in_dim_, int out_dim_) {
+  m.resize(in_dim_, out_dim_);
+  auto it = m.begin1();
+  auto it_end = m.end1();
   for (; it != it_end; ++it) {
     auto it_r = it.begin();
     auto it_r_end = it.end();
@@ -38,7 +41,7 @@ void InitWeight(matrix<float> *m, int in_dim_, int out_dim_) {
   }
 }
 
-matrix<float> CorruptedMatrix(matrix<float> m, float corruption_level) {
+void CorruptedMatrix(matrix<float> m, const float corruption_level) {
   auto it = m.begin1();
   auto it_end = m.end1();
   for (; it != it_end; ++it) {
@@ -50,7 +53,19 @@ matrix<float> CorruptedMatrix(matrix<float> m, float corruption_level) {
       }
     }
   }
-  return m;
+}
+
+void matrix_shuffle(matrix<float> &data_set,matrix<float> &labels) {
+  int i = data_set.size1();
+  int randi = 0;
+  srand(static_cast<unsigned>(time(NULL)));
+  for (int j = 0; j < i; ++j) {
+    randi = rand() % i;
+    swap(matrix_row<matrix<float>>(data_set, j), 
+         matrix_row<matrix<float>>(data_set, randi));
+    swap(matrix_row<matrix<float>>(labels, j),
+         matrix_row<matrix<float>>(labels, randi));
+  }
 }
 
 }  // namespace dl
