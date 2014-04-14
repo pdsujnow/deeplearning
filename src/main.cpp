@@ -14,18 +14,18 @@
 #include "Rbm.h"
 
 namespace ub = boost::numeric::ublas;
-using namespace boost::numeric::ublas;
+
 namespace dl {
 
-matrix<float> Normalize(matrix<float> m) {
+ub::matrix<float> Normalize(ub::matrix<float> m) {
   float mean;
   float svariance;
-  scalar_vector<float> v(m.size1());
+  ub::scalar_vector<float> v(m.size1());
   for (unsigned int i = 0; i < m.size2(); i++) {
-    matrix_column<matrix<float> > mc(m, i);
+    ub::matrix_column<ub::matrix<float> > mc(m, i);
     mean = sum(mc) / mc.size();
     mc = mc - mean*v;
-    svariance = sqrt(sum(element_prod(mc, mc)) / (mc.size() - 1));
+    svariance = sqrt(sum(ub::element_prod(mc, mc)) / (mc.size() - 1));
     if (svariance == 0) {
       continue;
     }
@@ -36,7 +36,7 @@ matrix<float> Normalize(matrix<float> m) {
 
 }  // namespace dl
 
-matrix<float> ReadData(const std::string &filename,matrix<float> &data_set) {
+ub::matrix<float> ReadData(const std::string &filename,ub::matrix<float> &data_set) {
   std::ifstream fin(filename.c_str());
   int num_items;
   int feature;
@@ -50,8 +50,8 @@ matrix<float> ReadData(const std::string &filename,matrix<float> &data_set) {
       fin >> data_set(i, j);
     }
   }
-  matrix_column<matrix<float>> l(data_set, 0);
-  matrix<float> labels(zero_matrix<float>(num_items, classes));
+  ub::matrix_column<ub::matrix<float>> l(data_set, 0);
+  ub::matrix<float> labels(ub::zero_matrix<float>(num_items, classes));
   for (int k = 0; k < num_items; ++k) {
     labels(k, static_cast<unsigned>(l(k))) = 1;
   }
@@ -63,9 +63,9 @@ int main() {
   using namespace dl;
   typedef std::shared_ptr<LayerBase> LayerPtr;
   std::string filename = "test_data.txt";
-  matrix<float> data;
-  matrix<float> label = ReadData(filename, data);
-  matrix_range<matrix<float>> data_x(data, range(0, data.size1()), range(1, data.size2()));
+  ub::matrix<float> data;
+  ub::matrix<float> label = ReadData(filename, data);
+  ub::matrix_range<ub::matrix<float>> data_x(data, ub::range(0, data.size1()), ub::range(1, data.size2()));
   data_x = Normalize(data_x);
 
   //Rbm rb(train_images, 784, 100, SIGM);

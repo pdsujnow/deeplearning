@@ -11,11 +11,11 @@ void LayerBase::InitPara() {
 }
 
 void LayerBase::CalcActivation() {
-  matrix<float> wx = prod(input, W);
+  ub::matrix<float> wx = prod(input, W);
   if (B.size1() == 0) {
     InitWeight(B, 1, out_dim_);
   }
-  wx = wx + prod(scalar_matrix<float>(wx.size1(), 1), B);
+  wx = wx + prod(ub::scalar_matrix<float>(wx.size1(), 1), B);
   auto it = wx.begin1();
   auto it_end = wx.end1();
   for (; it != it_end; ++it) {
@@ -40,7 +40,7 @@ void LayerBase::CalcActivation() {
   output = wx;
 }
 
-void LayerBase::CalcDpara(const matrix<float> &output_down) {
+void LayerBase::CalcDpara(const ub::matrix<float> &output_down) {
   dW = learning_rate * prod(trans(delta), output_down) / delta.size1();
   if (mW.size1() == 0) {
     ResetMatrix(mW, dW.size1(), dW.size2());
@@ -54,9 +54,9 @@ void LayerBase::add(std::shared_ptr<LayerBase> layer) {
   layer_vec.push_back(layer);
 }
 
-void LayerBase::ForwardProp(const matrix<float> &input, const matrix<float> &label) {
+void LayerBase::ForwardProp(const ub::matrix<float> &input, const ub::matrix<float> &label) {
   float sum = 0;
-  matrix<float> op;
+  ub::matrix<float> op;
   auto it = layer_vec.begin();
   auto it_end = layer_vec.end();
   (*it)->recv_data(input, label);
@@ -69,10 +69,10 @@ void LayerBase::ForwardProp(const matrix<float> &input, const matrix<float> &lab
       output = (*it)->get_output();
     }
   }
-  error = element_prod(error, error);
+  error = ub::element_prod(error, error);
 
-  scalar_vector<float> svl(error.size1());
-  scalar_vector<float> svr(error.size2());
+  ub::scalar_vector<float> svl(error.size1());
+  ub::scalar_vector<float> svr(error.size2());
   sum = inner_prod(prod(svl, error), svr);
 
   lossfunc = 0.5 * sum / error.size1();
@@ -97,8 +97,8 @@ void LayerBase::BackProp() {
   }
 }
 
-void LayerBase::test(const matrix<float> &data_set,
-                     const matrix<float> &labels) {
+void LayerBase::test(const ub::matrix<float> &data_set,
+                     const ub::matrix<float> &labels) {
   ForwardProp(data_set, labels);
   int numitems = output.size1();
   float error=0.0;
@@ -110,8 +110,8 @@ void LayerBase::test(const matrix<float> &data_set,
   float r = error / numitems;
 }
 
-void LayerBase::train(matrix<float> data_set,
-                      matrix<float> labels,
+void LayerBase::train(ub::matrix<float> data_set,
+                      ub::matrix<float> labels,
                       bool isdenoising) {
   int i, j;
   float corruption_level = 0.2f;
@@ -122,12 +122,12 @@ void LayerBase::train(matrix<float> data_set,
   for (i = 0; i < n_epochs; i++) {
     matrix_shuffle(data_set,labels);
     for (j = 0; j < batch_index; j++) {
-      matrix_range<matrix<float> > train_labels_p(labels,
-        range(j*batch_size, (j + 1) * batch_size),
-        range(0, labels.size2()));
-      matrix_range<matrix<float> > train_images_p(data_set,
-        range(j*batch_size, (j + 1) * batch_size),
-        range(0, data_set.size2()));
+      ub::matrix_range<ub::matrix<float> > train_labels_p(labels,
+        ub::range(j*batch_size, (j + 1) * batch_size),
+        ub::range(0, labels.size2()));
+      ub::matrix_range<ub::matrix<float> > train_images_p(data_set,
+        ub::range(j*batch_size, (j + 1) * batch_size),
+        ub::range(0, data_set.size2()));
       if (isdenoising == true) {
         CorruptedMatrix(train_images_p, corruption_level);
       }

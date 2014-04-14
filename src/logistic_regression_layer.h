@@ -1,21 +1,22 @@
 #ifndef SRC_LOGISTIC_REGRESSION_LAYER_H_
 #define SRC_LOGISTIC_REGRESSION_LAYER_H_
 
-#include "layer.h"
 #include "util.h"
 #include "macro.h"
 
 namespace dl {
+class LayerBase;
+
 class LogisticRegressionLayer :public LayerBase {
  public:
   LogisticRegressionLayer() = default;
   LogisticRegressionLayer(int in_dim, int out_dim, acti acti) :
     LayerBase(in_dim, out_dim, acti) {}
 
-  void CalcErrorterm(const matrix<float> &d, const matrix<float> &w) override {
+  void CalcErrorterm(const ub::matrix<float> &d, const ub::matrix<float> &w) override {
     if (acti_func == SIGM) {
-      scalar_matrix<float> m(output.size1(), output.size2());
-      delta = element_prod(-error, element_prod(output, m - output));
+      ub::scalar_matrix<float> m(output.size1(), output.size2());
+      delta = ub::element_prod(-error, ub::element_prod(output, m - output));
     }
     else if (acti_func == SOFTMAX) {
       delta = -error;

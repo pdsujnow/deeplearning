@@ -7,8 +7,8 @@
 #include <vector>
 
 #include "macro.h"
+namespace ub = boost::numeric::ublas;
 
-using namespace boost::numeric::ublas;
 
 namespace dl {
 class LayerBase {
@@ -18,32 +18,32 @@ class LayerBase {
     out_dim_(out_dim), in_dim_(in_dim), output_func(act) { InitPara(); }
   void InitPara();
   void add(std::shared_ptr<LayerBase> layer);
-  void train(matrix<float> data_set,
-             matrix<float> labels,
+  void train(ub::matrix<float> data_set,
+             ub::matrix<float> labels,
              bool isdenoising = false);
-  void test(const matrix<float> &data_set,
-            const matrix<float> &labels);
-  void ForwardProp(const matrix<float> &input, const matrix<float> &label);
+  void test(const ub::matrix<float> &data_set,
+            const ub::matrix<float> &labels);
+  void ForwardProp(const ub::matrix<float> &input, const ub::matrix<float> &label);
   void BackProp();
   void CalcActivation();
-  void CalcDpara(const matrix<float> &o);
+  void CalcDpara(const ub::matrix<float> &o);
 
-  void recv_data(const matrix<float> &data_set, const matrix<float> &label) {
+  void recv_data(const ub::matrix<float> &data_set, const ub::matrix<float> &label) {
     input = data_set;
     input_l = label;
   }
-  matrix<float> calc_error() {
+  ub::matrix<float> calc_error() {
     error = input_l - output;
     return error;
   }
 
-  const matrix<float> &get_delta() const { return delta; }
-  const matrix<float> &get_output() const { return output; }
-  const matrix<float> &get_W() const { return W; }
-  const matrix<float> &get_B() const { return B; }
-  const matrix<float> &get_input() const { return input; }
+  const ub::matrix<float> &get_delta() const { return delta; }
+  const ub::matrix<float> &get_output() const { return output; }
+  const ub::matrix<float> &get_W() const { return W; }
+  const ub::matrix<float> &get_B() const { return B; }
+  const ub::matrix<float> &get_input() const { return input; }
 
-  virtual void CalcErrorterm(const matrix<float> &d, const matrix<float> &w) {}
+  virtual void CalcErrorterm(const ub::matrix<float> &d, const ub::matrix<float> &w) {}
 
  protected:
   int out_dim_, in_dim_;
@@ -52,15 +52,15 @@ class LayerBase {
   int n_epochs;
   int batch_index;
 
-  matrix<float> W;
-  matrix<float> error;
-  matrix<float> output;
-  matrix<float> input;
-  matrix<float> input_l;
-  matrix<float> delta;
-  matrix<float> dW;
-  matrix<float> mW;
-  matrix<float> B;
+  ub::matrix<float> W;
+  ub::matrix<float> error;
+  ub::matrix<float> output;
+  ub::matrix<float> input;
+  ub::matrix<float> input_l;
+  ub::matrix<float> delta;
+  ub::matrix<float> dW;
+  ub::matrix<float> mW;
+  ub::matrix<float> B;
 
   float learning_rate;
   float momentum;

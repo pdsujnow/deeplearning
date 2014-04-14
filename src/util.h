@@ -5,16 +5,16 @@
 #include <boost/numeric/ublas/matrix.hpp>
 
 #include "macro.h"
+namespace ub = boost::numeric::ublas;
 
-using namespace boost::numeric::ublas;
 
 namespace dl {
 enum acti { SIGM, TANH, SOFTMAX };
-void MatrixAct(matrix<float> &m, const bool clamp);
-void InitWeight(matrix<float> &m, int in, int out);
-void ResetMatrix(matrix<float> &m, int in, int out);
-void CorruptedMatrix(matrix<float> m, const float corruption_level);
-void matrix_shuffle(matrix<float> &data_set, matrix<float> &labels);
+void MatrixAct(ub::matrix<float> &m, const bool clamp);
+void InitWeight(ub::matrix<float> &m, int in, int out);
+void ResetMatrix(ub::matrix<float> &m, int in, int out);
+void CorruptedMatrix(ub::matrix<float> m, const float corruption_level);
+void matrix_shuffle(ub::matrix<float> &data_set, ub::matrix<float> &labels);
 
 template<typename P1>
 P1* ReverseEndian(P1* p) {
