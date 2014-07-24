@@ -15,7 +15,8 @@ class LayerBase {
  public:
   LayerBase() = default;
   LayerBase(int in_dim, int out_dim, int act) :
-    out_dim_(out_dim), in_dim_(in_dim), output_func(act) { InitPara(); }
+    out_dim_(out_dim), in_dim_(in_dim), acti_func(act) { InitPara(); }
+  virtual ~LayerBase();
   void InitPara();
   void add(std::shared_ptr<LayerBase> layer);
   void train(ub::matrix<float> data_set,
